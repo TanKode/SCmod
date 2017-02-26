@@ -1,0 +1,86 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_driver = assignedDriver _veh;
+?_pilot == _driver : goto "PlaneCheck";
+~0.5
+goto "ExitScript";
+
+#PlaneCheck
+?(_veh) isKindOf "Plane" : goto "FixWaterKit";
+~0.01
+goto "ExitScript0";
+
+#FixWaterKit
+?!(alive player) : goto "ExitScript";
+enableRadio false;
+~0.5
+removeAllWeapons _veh;
+~0.1
+_veh addMagazineGlobal "Water9000Mag";
+_veh addMagazineGlobal "Water9000Mag";
+~0.1
+clearRadio;
+_veh addWeaponGlobal "Water5000";
+_veh addEventHandler ["Fired", "[_this select 0, _player] exec ""\SCmod_basic_waterkit\functions\SCmod_drop_3.sqs"""];
+~0.1
+?player in _veh : player action ["MANUALFIRE", _veh];
+_playername = profilename;
+
+hintSilent parseText format["<t size='1.2' color='#FF8700' align='left'>Hi %1</t><br /><br /><t size='1.2' color='#FFFFFF' align='left'>initializing modules, please wait.</t>" ,_playername];
+~3.0
+hintSilent parseText format["<t size='1.2' color='#FF8700' align='left'>SCmod v1.3</t><br /><br /><t size='1.2' color='#FFFFFF' align='left'>modules are initialised<br />For an optimal result, drop water below 180km/h (112mph).<br /></t>" ,_playername];
+
+~0.1
+clearRadio;
+enableRadio true;
+~0.2
+_pilot sidechat "Belly tank system enabled";
+
+#checkPos
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_count = _veh ammo "water5000";
+_SupplyTruck = count (_veh nearObjects ["HEMTT_supply_SC", 60]);
+?((_SupplyTruck >= 1) && ((speed _veh) <= 10) && (_count < 100)) : goto "fillingLoop";
+~0.1
+goto "checkPos";
+
+#fulltank
+~4
+goto "checkPos";
+
+#fillingLoop
+_count = _veh ammo "water5000";
+_SupplyTruck = count (_veh nearObjects ["HEMTT_supply_SC", 60]);
+?_SupplyTruck == 0 : goto "checkPos";
+?_count == 100 : goto "fulltank";
+_pilot sidechat "refilling in water";
+playsound "SCpump";
+
+#Initfilling
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_count = _veh ammo "water5000";
+_fill = _count + 2;
+~0.45
+?_count == 100 : goto "AddMag";
+_SupplyTruck = count (_veh nearObjects ["HEMTT_supply_SC", 60]);
+?_SupplyTruck == 0 : goto "checkPos";
+_veh setAmmo [currentWeapon _veh, _fill];
+goto "Initfilling";
+
+#AddMag
+_veh removeMagazineGlobal "Water9000Mag";
+~0.1
+_veh addMagazineGlobal "Water9000Mag";
+~0.45
+_pilot sidechat "refilling completed";
+goto "checkPos";
+
+#ExitScript0
+_playername = profilename;
+hintSilent parseText format["<t size='1.1' color='#FF8700' align='left'>%1, <br /><br /><t size='1.1' color='#FFFFFF' align='left'>waterkit bad configuration for the currently selected aircraft/vehicles<br /><br />select the appropriate vehicles</t>" ,_playername];
+exit
+
+#ExitScript
+exit

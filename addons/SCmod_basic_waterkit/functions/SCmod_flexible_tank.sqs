@@ -1,0 +1,41 @@
+#checkPos
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+?!(alive player) : goto "ExitScript";
+_count = _veh ammo "water9000";
+_flexibleTank = count (_veh nearObjects ["flexible_tank", 7]);
+?((_flexibleTank >= 1) && ((speed _veh) <= 10) && (_count < 100)) : goto "fillingLoop";
+~0.1
+goto "checkPos";
+
+#fulltank
+~4
+goto "checkPos";
+
+#fillingLoop
+_count = _veh ammo "water9000";
+_flexibleTank = count (_veh nearObjects ["flexible_tank", 7]);
+?_flexibleTank == 0 : goto "checkPos";
+?_count == 100 : goto "fulltank";
+_pilot sidechat "refilling in water";
+playsound "SCpump";
+
+#Initfilling
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_count = _veh ammo "water9000";
+_fill = _count + 2;
+~0.15
+?_count == 100 : goto "AddMag";
+_flexibleTank = count (_veh nearObjects ["flexible_tank", 7]);
+?_flexibleTank == 0 : goto "checkPos";
+_veh setAmmo [currentWeapon _veh, _fill];
+goto "Initfilling";
+
+#AddMag
+~0.05
+_pilot sidechat "refilling completed";
+goto "checkPos";
+
+#ExitScript
+exit

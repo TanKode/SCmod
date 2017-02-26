@@ -1,0 +1,26 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_bucket = _veh nearEntities ["heli_bamby_bucket", 20];
+_id = _this select 2;
+_pilot removeAction _id;
+~0.02
+_slingBucket = getSlingLoad _veh;
+clearRadio;
+enableRadio true;
+~0.1
+?!(isNull _slingBucket) : goto "SlingChk";
+_pilot sidechat "the helicopter is equipped with any bucket.";
+detach (_bucket select 0);
+goto "ExitScript";
+
+#SlingChk
+detach (_bucket select 0);
+clearRadio;
+enableRadio true;
+_pilot sidechat "bucket is deployed";
+~0.05
+_attachBucket = _veh addAction ["<t color='#8300ff'>Attach Bucket</t>", "\SCmod_basic_waterkit\functions\SCmod_bamby_init.sqs","",4.65,false,true,"","driver _target == _this"];
+~0.10
+
+#ExitScript
+exit

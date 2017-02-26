@@ -1,0 +1,11 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_ropes = ropes _veh;
+~0.02
+clearRadio;
+enableRadio true;
+~0.02
+{ropeUnwind [_x, 3, -4, true];} foreach _ropes;
+~0.02
+_pilot sidechat "raising the ropes";
+exit

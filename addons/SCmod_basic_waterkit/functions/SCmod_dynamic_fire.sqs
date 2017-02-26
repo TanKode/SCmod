@@ -1,0 +1,138 @@
+~0.5
+_missCnt = 0;
+#MoveMarker
+? _missCnt >= 5 : goto "endSCmission";
+~40 + random 60
+?!(alive player) : goto "ExitScript";
+_missCnt = _missCnt + 1;
+~0.05
+_PosFireList = selectbestplaces [player,5000,"forest",25,3];
+_PosFireSelect = _PosFireList select (floor random (count _PosFireList));
+_markerPos = _PosFireSelect select 0;
+~0.05
+_marker = createMarkerLocal ["Bushfire", _markerPos];
+"Bushfire" setMarkerShapeLocal "ICON";
+"Bushfire" setMarkerTypeLocal "selector_selectable";
+"Bushfire" setMarkerSizeLocal [1.3, 1.3];
+"Bushfire" setMarkerTextLocal " forest fire";
+"Bushfire" setMarkerColorLocal "ColorRed";
+~0.05
+_SCmod_fireGen = "SCmod_fire" createVehicleLocal _markerPos;
+~0.05
+player exec "\SCmod_basic_waterkit\functions\SCmod_firefog.sqs";
+~0.1
+_landVehPos1 = [_SCmod_fireGen, 70 + (random 70), (random 360)] call BIS_fnc_relPos;
+_landVehPos2 = [_SCmod_fireGen, 70 + (random 70), (random 360)] call BIS_fnc_relPos;
+_landVehPos3 = [_SCmod_fireGen, 70 + (random 70), (random 360)] call BIS_fnc_relPos;
+~0.05
+_randomVeh1 = ["Offroad_SC","Tempest_SC_water","Tempest_SC_supply"] call BIS_fnc_selectRandom;
+_randomVeh2 = ["Tempest_SC_water","Tempest_SC_supply"] call BIS_fnc_selectRandom;
+_randomVeh3 = ["Tempest_SC_water","Tempest_SC_supply"] call BIS_fnc_selectRandom;
+~0.05
+_landVehX1 = _randomVeh1 createVehicle _landVehPos1;
+_landVehX1 setVariable ["BIS_enableRandomization", false];
+_landVehX1 setDir random 360;
+~0.01
+_landVehX2 = _randomVeh2 createVehicle _landVehPos2;
+_landVehX2 setVariable ["BIS_enableRandomization", false];
+_landVehX2 setDir random 360;
+~0.01
+_landVehX3 = _randomVeh3 createVehicle _landVehPos3;
+_landVehX3 setVariable ["BIS_enableRandomization", false];
+_landVehX3 setDir random 360;
+~10.0 + random 20
+
+_grp = group player;
+_wp = _grp addWaypoint [_markerPos, 0];
+[_grp, 1] setWaypointType "SUPPORT";
+[_grp, 1] setWaypointDescription "forest fire.";
+
+#WaitNextMission
+~1.0
+_fireDetect = nearestObjects [player, ["SCmod_fire"], 8000];
+{player reveal _x} forEach _fireDetect;
+_gridPos = mapGridPosition _markerPos;
+_count = {alive _x} count _fireDetect;
+goto "FireInformations";
+
+#SpeedAlert
+_firenear = player distance _markerPos;
+? _firenear <=300 : goto "SpeedAlert2";
+goto "FireInformations2";
+
+#SpeedAlert2
+null = ["<t color='#BF0000' size = '.5'>SLOW DOWN<br /><br />Adjust your speed</t>",-1,-1,3,1,0,789] spawn BIS_fnc_dynamicText;
+goto "FireInformations2";
+
+#FireInformations
+?(vehicle player) isKindOf "Helicopter" : goto "spdHelicopter";
+?(vehicle player) isKindOf "Plane" : goto "spdPlane";
+
+#spdHelicopter
+_spd = 145;
+goto "followScript";
+
+#spdPlane
+_spd = 290;
+
+#followScript
+_vehspeed = (speed vehicle player);
+? _vehspeed >=_spd : goto "SpeedAlert";
+~0.1
+goto "FireInformations2";
+
+#FireInformations2
+?_count == 0 : goto "ClearHintSilentParseTextFormat";
+~0.1
+_amplitudeEx = ((_count/20)*100);
+~0.15
+?(_amplitudeEx >= 10) : _amplitude = "small";
+~0.15
+?(_amplitudeEx >= 25) : _amplitude = "medium";
+~0.15
+?(_amplitudeEx >= 50) : _amplitude = "big";
+~0.15
+?(_amplitudeEx >= 70) : _amplitude = "huge";
+
+_dest = _markerPos;
+_orig = getpos player;
+_vector = ((((_dest select 0) - (_orig select 0)) atan2 ((_dest select 1) - (_orig select 1))) + 360) % 360;
+_vectorRnd = round _vector;
+_distanceCal1 = player distance _markerPos;
+_distanceCal2 = round _distanceCal1;
+_distanceCal3 = (_distanceCal2/100);
+_distanceCal4 = round _distanceCal3;
+_distanceKmeter = (_distanceCal4/10);
+_winddir = round windDir;
+_windspd0 = 3.6 * sqrt ((wind select 0)*(wind select 0) + (wind select 1)*(wind select 1));
+_windspd = round _windspd0;
+
+_towns = nearestLocations [_markerPos, ["NameVillage","NameCity","NameCityCapital","NameLocal","CityCenter","Airport"], 8000];
+_townLocation = text (_towns select 0);
+
+hintSilent parseText format["<t size='1.1' color='#FF8700' align='left'>A bushfire has been reported near </t><t size='1.1' color='#FFFFFF' align='left'>%1</t><t size='1.1' color='#FF8700' align='left'> at the following coordinates:</t><br /><br /><t size='1.2' color='#FFFFFF' align='left'>%2 NW</t><br /><br /><t size='1.1' color='#FFFFFF' align='left'>Heading:</t><t size='1.1' color='#FF8700' align='left'> %3</t><br /><t size='1.1' color='#FFFFFF' align='left'>Distance:</t><t size='1.1' color='#FF8700' align='left'> %4 %5</t><br /><t size='1.1' color='#FFFFFF' align='left'>Amplitude:</t><t size='1.1' color='#FF8700' align='left'> %6 %7</t><br /><br /><t size='1.1' color='#FFFFFF' align='left'>Wind speed:</t><t size='1.1' color='#FF8700' align='left'> %8 %9</t><br /><t size='1.1' color='#FFFFFF' align='left'>Wind direction:</t><t size='1.1' color='#FF8700' align='left'> %10</t>", _townLocation, _gridPos, _vectorRnd, _distanceKmeter, "km", _amplitude, "fire", _windspd, "kmph", _winddir];
+
+goto "WaitNextMission";
+
+#ClearHintSilentParseTextFormat
+~1.5
+{_x setdammage ((getdammage _x) + 1.0)} forEach nearestObjects [player, ["SCmod_fire"], 5250];
+_playername = profilename;
+~1.0 + random 10
+hintSilent parseText format["<t size='1.1' color='#FF8700' align='left'>%1, stay tuned on the emergency radio frequency, NW coordinates, of the next mission will be transmitted.</t><br /><br /><t size='1.1' color='#FFFFFF' align='left'>Observe the reliefs and monitor the amount of water in your tank.</t>", _playername];
+~0.05
+deleteMarkerLocal "Bushfire";
+deleteWaypoint [_grp, 1];
+~40 + random 60
+deletevehicle _landVehX1;
+deletevehicle _landVehX2;
+deletevehicle _landVehX3;
+goto "MoveMarker";
+
+#endSCmission
+hintSilent parseText format["<t size='1.1' color='#FF8700' align='left'>%1, the area is under surveillance, you can land at your HQ, and rest.</t><br /><br /><t size='1.1' color='#FFFFFF' align='left'>The forests thank you. Good job!</t>", _playername];
+~4.0
+"end1" call BIS_fnc_endMission;
+
+#ExitScript
+exit

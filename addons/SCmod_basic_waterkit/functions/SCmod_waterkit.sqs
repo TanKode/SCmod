@@ -1,0 +1,140 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_driver = assignedDriver _veh;
+?_pilot == _driver : goto "HelicopterCheck";
+~0.01
+goto "ExitScript";
+
+#HelicopterCheck
+?(_veh) isKindOf "Helicopter" : goto "FixWaterKit";
+~0.01
+goto "ExitScript0";
+
+#FixWaterKit
+~0.01
+_veh allowDamage false;
+~0.01
+?!(alive player) : goto "ExitScript";
+~0.1
+_veh addMagazineGlobal "Water9000Mag";
+~0.1
+_veh addWeaponGlobal "Water9000";
+~0.1
+_veh addEventHandler ["Fired", "[_this select 0, _player] exec ""\SCmod_basic_waterkit\functions\SCmod_drop.sqs"""];
+~0.1
+enableRadio false;
+~0.1
+clearRadio;
+~0.1
+_veh exec "\SCmod_basic_waterkit\functions\SCmod_pipe.sqs";
+
+_waterkitPos = [0,2,-2.1];
+?_veh isKindOf "SC_412" : goto "SC412";
+?_veh isKindOf "O_Heli_Light_02_unarmed_F" : goto "PO30";
+?_veh isKindOf "I_Heli_Transport_02_F" : goto "CH49";
+?_veh isKindOf "Heli_Transport_02_base_F" : goto "CH49";
+?_veh isKindOf "B_Heli_Light_01_F" : goto "MH6";
+?_veh isKindOf "B_Heli_Transport_03_unarmed_F" : goto "CH67";
+?_veh isKindOf "I_Heli_light_03_unarmed_F" : goto "WY55";
+?_veh isKindOf "O_Heli_Transport_04_F" : goto "MI290";
+?_veh isKindOf "ffaa_famet_cougar_olive" : goto "AS532";
+?_veh isKindOf "ffaa_famet_cougar" : goto "AS532";
+?_veh isKindOf "GR_Bell412_1_base" : goto "HUEY";
+?_veh isKindOf "GR_UH1N_1_base" : goto "HUEY";
+?_veh isKindOf "GR_AW101_Base" : goto "AW101";
+?_veh isKindOf "ARMSCor_A109_Civ" : goto "A109";
+?_veh isKindOf "SCmod_cougar" : goto "AS532";
+?_veh isKindOf "SCmod_puma_base" : goto "SA330";
+
+#PO30
+_waterkitPos = [0,1,-1.55];
+goto "Mounting";
+#CH49
+_waterkitPos = [0,2,-2.70];
+goto "Mounting";
+#MH6
+_waterkitPos = [0,0.2,-0.4];
+goto "Mounting";
+#CH67
+_waterkitPos = [0,0.9,-2.60];
+goto "Mounting";
+#WY55
+_waterkitPos = [0,2.5,-0.9];
+goto "Mounting";
+#MI290
+_waterkitPos = [-0.12,-0.3,-1.4];
+goto "Mounting";
+#AS532
+_waterkitPos = [0.125,2.2,-2.05];
+goto "Mounting";
+#HUEY
+_waterkitPos = [0,0.8,-1.81];
+goto "Mounting";
+#AW101
+_waterkitPos = [0.22,1.8,-2.2];
+goto "Mounting";
+#SC412
+_waterkitPos = [0.0,1.4,-1.62];
+goto "Mounting";
+#A109
+_waterkitPos = [0,1,0.9];
+#SA330
+_waterkitPos = [0,2,-1.15];
+
+#Mounting
+_waterkit = "heli_water_kit" createVehicle (getpos _pilot);
+~0.1
+_waterkit attachTo [_veh, _waterkitPos];
+?player in _veh : _pilot action ["MANUALFIRE", _veh];
+_playername = profilename;
+
+hintSilent parseText format["<t size='1.2' color='#FF8700' align='left'>Hi %1</t><br /><br /><t size='1.2' color='#FFFFFF' align='left'>initializing modules, please wait.</t>" ,_playername];
+~3.0
+hintSilent parseText format["<t size='1.2' color='#FF8700' align='left'>SCmod v1.3</t><br /><br /><t size='1.2' color='#FFFFFF' align='left'>modules are initialised<br />For an optimal result, drop water below 80km/h (50mph).<br /></t>" ,_playername];
+
+~0.1
+clearRadio;
+enableRadio true;
+~0.2
+_pilot sidechat "waterkit is enabled";
+~3.0
+_veh allowDamage true;
+
+#checkPos
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_isWater = surfaceIsWater position _veh;
+?_isWater = true : goto "fillingLoop";
+~0.1
+goto "checkPos";
+
+#fulltank
+_pilot sidechat "refilling completed";
+~4
+goto "checkPos";
+
+#fillingLoop
+_count = _veh ammo "water9000";
+?(getpos _veh select 2) > 4: goto "checkPos";
+?_count == 100 : goto "fulltank";
+_pilot sidechat "refilling in water";
+playsound "SCpump";
+
+#Initfilling
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_count = _veh ammo "water9000";
+_fill = _count + 2;
+~0.45
+?_count == 100 : goto "checkPos";
+?(getpos _veh select 2) > 4: goto "checkPos";
+_veh setAmmo [currentWeapon _veh, _fill];
+goto "Initfilling";
+
+#ExitScript0
+_playername = profilename;
+hintSilent parseText format["<t size='1.1' color='#FF8700' align='left'>%1, <br /><br /><t size='1.1' color='#FFFFFF' align='left'>waterkit bad configuration for the currently selected helicopter/vehicles<br /><br />select the appropriate vehicles</t>" ,_playername];
+exit
+
+#ExitScript
+exit

@@ -1,0 +1,34 @@
+_pilot = _this select 0;
+_veh = _this select 1;
+
+#INSSlingAction
+_id4 = _veh addAction ["<t color='#FF8700'>Raise sling ropes</t>","\SCmod_basic_waterkit\functions\SCmod_bambyRS.sqs","",4.6,false,true,"","driver _target == _this"];
+_pilot setVariable ["RaiseSling", _id4];
+_id5 = _veh addAction ["<t color='#FF8700'>Lower sling ropes</t>","\SCmod_basic_waterkit\functions\SCmod_bambyLW.sqs","",4.5,false,true,"","driver _target == _this"];
+_pilot setVariable ["LowerSling", _id5];
+_pilot sidechat "cargo is loaded";
+~0.25
+goto "CheckCargo";
+
+#DelSlingAction
+_id4 = _pilot getVariable "RaiseSling";
+_pilot removeAction _id4;
+_id5 = _pilot getVariable "LowerSling";
+_pilot removeAction _id5;
+_pilot sidechat "cargo is unloaded";
+goto "CheckCargo2";
+~0.25
+
+#CheckCargo
+~0.1
+_cargo = getSlingLoad _veh;
+?(isNull _cargo) : goto "DelSlingAction";
+~0.25
+goto "CheckCargo";
+
+#CheckCargo2
+~0.1
+_cargo = getSlingLoad _veh;
+?!(isNull _cargo) : goto "INSSlingAction";
+~0.25
+goto "CheckCargo2";

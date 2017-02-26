@@ -1,0 +1,31 @@
+#InitForecast
+_sxp = ((speed player) + 1);
+_coeff = ((1/_sxp)*60);
+~0.05
+_fireDetec = nearestObjects [player, ["SCmod_fire"], 100];
+_firecount = {alive _x} count _fireDetec;
+~0.05
+?_firecount == 0 : goto "ForecastOff";
+?_firecount >= 12 : goto "ForecastOn3";
+?_firecount >= 5 : goto "ForecastOn2";
+?_firecount >= 1 : goto "ForecastOn1";
+
+#ForecastOn3
+~0.01
+_coeff setFog [0.50, 0.01, 15];
+goto "InitForecast";
+
+#ForecastOn2
+~0.01
+_coeff setFog [0.30, 0.01, 10];
+goto "InitForecast";
+
+#ForecastOn1
+~0.01
+_coeff setFog [0.10, 0.01, 5];
+goto "InitForecast";
+
+#ForecastOff
+~0.01
+_coeff setFog [0.00, 0.00, 0];
+goto "InitForecast";

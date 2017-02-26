@@ -1,0 +1,47 @@
+_veh = _this select 0;
+_weapon = _this select 1;
+_weaponClass = currentWeapon _veh;
+_count = _veh ammo _weaponClass;
+?(_weaponClass == "water9000"): goto "ParticleWater";
+?(_weaponClass == "water10000"): goto "ParticleWater";
+?(_weaponClass == "water7000"): goto "ParticleWater";
+goto "FEvHexit";
+
+#ParticleWater
+?_count == 0 : goto "WaterQte0";
+?_count < 50 : goto "WaterQte2";
+?_count >= 50 : goto "WaterQte1";
+
+#WaterQte0
+_color = [[(0.45 + random 0.12), (0.50 + random 0.12), (0.85 + random 0.12), 0.00], [0.48, 0.52, 0.52, 0.00], [0.42, 0.5, 0.5, 0.00]];
+goto "ParticleWaterEnd";
+
+#WaterQte2
+_color = [[(0.43 + random 0.12), (0.48 + random 0.12), (0.85 + random 0.12), (0.001 + (_count/200))], [0.48, 0.52, 0.52, 0.01], [0.42, 0.5, 0.5, 0.00]];
+goto "ParticleWaterEnd";
+
+#WaterQte1
+_color = [[(0.45 + random 0.12), (0.50 + random 0.12), (0.85 + random 0.12), 0.25], [0.48, 0.52, 0.52, 0.01], [0.42, 0.5, 0.5, 0.00]];
+goto "ParticleWaterEnd";
+
+#ParticleWaterEnd
+~0.020
+_Move = [0, 0, -0.4];
+_Shape = ["\A3\data_f\ParticleEffects\Universal\smoke.p3d",1,0,1];
+_Obj = _veh;
+_Size = [(2.6 + random 0.4), (22 + random 2), (16 + random 2)];
+_PSPos = [0, 1.4, -3.0];
+_Anim = [1.5, 0.9, 0.4];
+_Rot = (1 + random 2);
+_Wght = 5000;
+_Vol = 2000;
+_Rubb = 1000;
+Drop [_Shape, "", "Billboard", 1, 3, _PSPos, _Move, _Rot, _Wght, _Vol, _Rubb, _Size, _color, _Anim, 0.5, 0.5, "", "", _Obj];
+
+_fallposx = getpos _veh select 0;
+_fallposy = getpos _veh select 1;
+_array = [_fallposx, _fallposy, 0] nearObjects ["SCmod_fire", 16];
+{_x setdammage ((getdammage _x) + 1.0)} forEach _array;
+
+#FEvHexit
+exit

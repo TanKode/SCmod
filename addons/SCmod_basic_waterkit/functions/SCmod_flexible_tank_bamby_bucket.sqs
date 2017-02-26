@@ -1,0 +1,44 @@
+#checkPos
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_cargo = getSlingLoad _veh;
+_count = _veh ammo "water8000";
+_cargo setMass (_count * 30);
+_flexibleTank = count (_veh nearObjects ["flexible_tank", 25]);
+?((_flexibleTank >= 1) && ((speed _veh) <= 10) && (_count < 100)) : goto "fillingLoop";
+~0.1
+goto "checkPos";
+
+#fulltank
+_pilot sidechat "refilling completed";
+~4
+goto "checkPos";
+
+#fillingLoop
+_cargo = getSlingLoad _veh;
+?_cargo iskindof "heli_bamby_bucket" : goto "fillingLoopNext";
+~0.1
+goto "checkPos";
+
+#fillingLoopNext
+_count = _veh ammo "water8000";
+?(getpos _cargo select 2) > 2.5: goto "checkPos";
+?_count == 100 : goto "fulltank";
+_pilot sidechat "refilling in water";
+playsound "SCpump";
+
+#Initfilling
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_cargo = getSlingLoad _veh;
+_count = _veh ammo "water8000";
+_fill = _count + 2;
+~0.05
+?_count == 100 : goto "checkPos";
+?(getpos _cargo select 2) > 2.5: goto "checkPos";
+_veh setAmmo [currentWeapon _veh, _fill];
+_cargo setMass (_count * 30);
+goto "Initfilling";
+
+#ExitScript
+exit

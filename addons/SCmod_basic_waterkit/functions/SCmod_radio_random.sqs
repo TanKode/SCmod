@@ -1,0 +1,45 @@
+#loopSpeech
+~random 30+30
+?!(alive player) : goto "ExitScript";
+_randomCount = random 80;
+~0.05
+? _randomCount <=20 : goto "RADIOSpeech1";
+~0.05
+? _randomCount <=40 : goto "RADIOSpeech2";
+~0.05
+? _randomCount <=60 : goto "RADIOSpeech3";
+~0.05
+? _randomCount <=80 : goto "RADIOSpeech4";
+~0.05
+goto "loopSpeech";
+
+#RADIOSpeech1
+playSound "generic_garbled_1";
+~0.5
+systemChat "HQ channel : ... !";
+~0.05
+goto "loopSpeech";
+
+#RADIOSpeech2
+playSound "generic_garbled_2";
+~0.5
+systemChat "HQ channel : ... !";
+~0.05
+goto "loopSpeech";
+
+#RADIOSpeech3
+playSound "generic_garbled_3";
+~0.5
+systemChat "HQ channel : ... !";
+~0.05
+goto "loopSpeech";
+
+#RADIOSpeech4
+playSound "generic_garbled_4";
+~0.5
+systemChat "HQ channel : ... ?";
+~0.05
+goto "loopSpeech";
+
+#ExitScript
+exit

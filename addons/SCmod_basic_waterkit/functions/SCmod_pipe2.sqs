@@ -1,0 +1,51 @@
+~0.05
+_veh = vehicle _this;
+_waterkit = nearestObject [_veh, "heli_water_kit"];
+_waterkit allowDamage false;
+_posPipe = [(position _veh select 0), (position _veh select 1), (position _veh select 2) - 3];
+
+~0.05
+_pipe = createVehicle ["wtrkit_Pipe2", _posPipe, [], 0, "NONE"];
+_pipe addEventHandler ["HandleDamage", {false}];
+_pipe attachTo [vehicle player, [3,0,0]];
+_pipe setVectorDirAndUp [[0,0,1],[-1,0,0]];
+_pipe attachTo [vehicle player, [3,0,0]];
+_pipe setVectorDirAndUp [[0,0,1],[-1,0,0]];
+detach _pipe;
+_waterkit lock true;
+_pipe lock true;
+
+~0.05
+_myRope0 = ropeCreate [_waterkit, "SlingLoad0", _pipe, "SlingLoadCargo1", 1];
+_myRope1 = ropeCreate [_waterkit, "SlingLoad0", _pipe, "SlingLoadCargo2", 1];
+_myRope2 = ropeCreate [_waterkit, "SlingLoad0", _pipe, "SlingLoadCargo3", 1];
+_myRope3 = ropeCreate [_waterkit, "SlingLoad0", _pipe, "SlingLoadCargo4", 1];
+
+_myRope4 = ropeCreate [_pipe, "SlingLoadCargo1", _waterkit, "SlingLoad0", 1];
+_myRope5 = ropeCreate [_pipe, "SlingLoadCargo2", _waterkit, "SlingLoad0", 1];
+_myRope6 = ropeCreate [_pipe, "SlingLoadCargo3", _waterkit, "SlingLoad0", 1];
+_myRope7 = ropeCreate [_pipe, "SlingLoadCargo4", _waterkit, "SlingLoad0", 1];
+
+_pipe disablecollisionwith _veh;
+_pipe disablecollisionwith _waterkit;
+
+#LoopUnWind
+~.01
+ropeUnwind [_myRope0, 3, 0.7];
+ropeUnwound _myRope4;
+ropeUnwind [_myRope1, 3, 0.7];
+ropeUnwound _myRope5;
+ropeUnwind [_myRope2, 3, 0.7];
+ropeUnwound _myRope6;
+ropeUnwind [_myRope3, 3, 0.7];
+ropeUnwound _myRope7;
+~.01
+ropeUnwound _myRope0;
+ropeUnwind [_myRope4, 3, 0.7];
+ropeUnwound _myRope1;
+ropeUnwind [_myRope5, 3, 0.7];
+ropeUnwound _myRope2;
+ropeUnwind [_myRope6, 3, 0.7];
+ropeUnwound _myRope3;
+ropeUnwind [_myRope7, 3, 0.7];
+goto "LoopUnWind"
