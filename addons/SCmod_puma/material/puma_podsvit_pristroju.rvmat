@@ -1,0 +1,9 @@
+ambient[]={0.1,0.1,0.1,1};
+diffuse[]={0,0,0,1};
+forcedDiffuse[]={0.1,0.1,0.1,0};
+emmisive[]={0.52200001,0.91900003,0.52700001,1};
+specular[]={0,0,0,0};
+specularPower=0;
+nextPass="SCmod_puma\material\puma_flash-pass2.rvmat";
+PixelShaderID="Normal";
+VertexShaderID="Basic";
