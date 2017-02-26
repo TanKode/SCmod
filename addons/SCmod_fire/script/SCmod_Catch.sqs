@@ -1,0 +1,45 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+~0.1
+
+#RopeDef
+_SideRope = (ropes _veh) select 0;
+_ropePos = ropeEndPosition _SideRope select 1;
+_length = ropeLength _SideRope;
+?(_length <=1.5) : goto "ExitScript";
+~0.1
+_ManSearch = _ropePos nearEntities ["Man", 3.5];
+~0.1
+?!(isNull (_ManSearch select 0)) : goto "ManCatch";
+~0.1
+goto "RopeDef";
+
+#ManCatch
+(_ManSearch select 0) switchmove "InBaseMoves_sitHighUp1";
+~0.1
+(_ManSearch select 0) enablesimulation false;
+~0.1
+(_ManSearch select 0) setpos [ getPos (_ManSearch select 0) select 0, getPos (_ManSearch select 0) select 1, (getPos (_ManSearch select 0) select 2) +0.5];
+[(_ManSearch select 0),[0,0,1.2]] ropeAttachTo _SideRope;
+ropeUnwind [_SideRope, 3, -1, true];
+~0.2
+_pilot sidechat "man on winch rope";
+
+#LengthCtrl
+_length = ropeLength _SideRope;
+?(_length <=1.5) : goto "ExitScript";
+~0.1
+?(speed _veh) >= 30 : ropeUnwind [_SideRope, 4, -20, true];
+?(speed _veh) <= -30 : ropeUnwind [_SideRope, 4, -20, true];
+~0.1
+goto "LengthCtrl";
+
+#ExitScript
+?!(isNull (_ManSearch select 0)) : (_ManSearch select 0) moveincargo _veh;
+~0.1
+?!(isNull (_ManSearch select 0)) : _pilot sidechat "man onboard";
+?!(isNull (_ManSearch select 0)) : (_ManSearch select 0) enablesimulation true;
+?!(isNull (_ManSearch select 0)) : [(_ManSearch select 0)] joinsilent (group _pilot);
+
+~0.1
+exit

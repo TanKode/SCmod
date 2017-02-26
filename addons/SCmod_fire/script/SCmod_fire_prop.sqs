@@ -1,0 +1,12 @@
+_origFire = _this select 0;
+~7 + random 8
+_distance = 2 + random 3 + ((windStr + 0.1)*10);
+_direction = windDir - ((random 160) + (random 160));
+_NewPos = _origFire getPos [_distance, _direction];
+~0.05
+_PropFire = "SCmod_fire";
+_Firecreate = _PropFire createVehicle getpos _origFire;
+~0.01
+_Firecreate setPos _NewPos;
+~0.05
+exit

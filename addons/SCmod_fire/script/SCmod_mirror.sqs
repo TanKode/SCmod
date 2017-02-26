@@ -1,0 +1,36 @@
+_veh = _this select 0;
+~0.25
+[_veh] exec "\SCmod_fire\script\SCmod_Basket.sqs";
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.5
+_vehAssigned = assignedVehicle player;
+~0.5
+_RoleArray = assignedVehicleRole player;
+~0.5
+? (_RoleArray select 0 == "Driver") and (_vehAssigned == _veh) : moveOut player;
+~0.6
+player moveInDriver _vehAssigned;
+~0.2
+player assignAsDriver _vehAssigned;
+~0.5
+_mirrorPos = [0,7.1,-2.4];
+_mirror = "sc_reflection_mirror" createVehicle (getpos _veh);
+_mirror attachTo [_veh, _mirrorPos];
+~0.5
+?(player in _veh) : goto "cameraPiPInit";
+~0.01
+exit
+
+#cameraPiPInit
+~0.01
+_cam = "camera" camCreate [getpos _veh select 0, getpos _veh select 1, (getpos _veh select 2) -1];
+_cam attachTo [_veh,[1,9,-3.1]];
+_cam setVectorDirAndUp [[0,-1,0],[0,0,1]];
+_cam camSetFov 0.7;
+_cam camCommit 0;
+"rendertarget3" setPiPEffect [4];
+_cam cameraEffect ["INTERNAL", "BACK","rendertarget3"];
+_mirror setObjectTexture [0,"#(argb,256,256,1)r2t(rendertarget3,1.0)"];
+~0.05
+exit

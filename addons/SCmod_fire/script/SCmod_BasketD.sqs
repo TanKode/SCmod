@@ -1,0 +1,81 @@
+_pilot = _this select 0;
+_veh = assignedVehicle _pilot;
+_id = _this select 2;
+_pilot removeAction _id;
+~0.1
+_slingcargo = getSlingLoad _veh;
+~0.1
+?(isNull _slingcargo) : goto "GetslingloadchkOK";
+_pilot sidechat "not possible to deploy the winch rope, because a charge is under the helicopter.";
+goto "ExitScript";
+
+#GetslingloadchkOK
+_cargoEmpty = _veh emptyPositions "cargo";
+? _cargoEmpty == 0 : goto "ExitScript2";
+
+#GetslingloadchkOK_cargo
+~0.1
+_veh animateDoor ['PuertaDerecha',1];
+_veh animateDoor ['door_r',1];
+_veh animateDoor ['door_back_R',1];
+_veh animateDoor ['Door_R_source',1];
+_veh animate ['DoorARD',1];
+
+~0.1
+?_veh isKindOf "I_Heli_Transport_02_F" : goto "CH49";
+?_veh isKindOf "Heli_Transport_02_base_F" : goto "CH49";
+?_veh isKindOf "B_Heli_Transport_03_unarmed_F" : goto "CH67";
+?_veh isKindOf "SCmod_cougar" : goto "PointBasketLoad0";
+?_veh isKindOf "SCmod_puma_base" : goto "PointBasketLoad0";
+
+#PointBasketLoad0
+_AttachPos = "BasketLoad0";
+goto "RopeAttachPos";
+#CH49
+_AttachPos = [1.9,1.8,-0.1];
+goto "RopeAttachPos";
+#CH67
+_AttachPos = [1.9,4.05,-0.12];
+
+#RopeAttachPos
+_SideRope = ropeCreate [_veh, _AttachPos, 4];
+~0.1
+_ropePos = ropeEndPosition _SideRope select 1;
+~0.1
+[_pilot] exec "\SCmod_fire\script\SCmod_Catch.sqs";
+~0.1
+_id1 = _pilot addAction ["<t color='#FF8700'>Raise winch rope</t>","\SCmod_basic_waterkit\functions\SCmod_bambyRS.sqs","",4.6,false,true]; _pilot setVariable ["Raise", _id1];
+
+_id2 = _pilot addAction ["<t color='#FF8700'>Lower winch rope</t>","\SCmod_basic_waterkit\functions\SCmod_bambyLW.sqs","",4.5,false,true]; _pilot setVariable ["Lower", _id2];
+
+#RopelengthControl
+~0.1
+_length = ropeLength _SideRope;
+~0.1
+?(_length <=1) : goto "RopeLow";
+goto "RopelengthControl";
+
+#RopeLow
+~0.1
+_id1 = _pilot getVariable "Raise"
+_pilot removeAction _id1;
+_id2 = _pilot getVariable "Lower";
+_pilot removeAction _id2;
+~0.1
+ropeDestroy _SideRope;
+~0.1
+_veh animateDoor ['PuertaDerecha',0];
+_veh animateDoor ['door_r',0];
+_veh animateDoor ['door_back_R',0];
+_veh animateDoor ['Door_R_source',0];
+_veh animate ['DoorARD',0];
+~2
+goto "ExitScript";
+
+#ExitScript2
+_pilot sidechat "the maximum capacity of passengers is reached.";
+
+#ExitScript
+[_pilot] exec "\SCmod_fire\script\SCmod_Basket.sqs";
+~0.1
+exit

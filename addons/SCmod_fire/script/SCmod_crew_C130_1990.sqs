@@ -1,0 +1,26 @@
+_veh = _this select 0;
+_vehAssigned = assignedVehicle player;
+_RoleArray = assignedVehicleRole player;
+~0.01
+_veh setObjectTextureGlobal [0, "SCmod_L100J\DATA\tex\c130j_body_90_co.paa"];
+~0.01
+_veh setObjectTextureGlobal [1, "SCmod_L100J\DATA\tex\c130j_wings_90_co.paa"];
+~0.01
+_veh setObjectTextureGlobal [2, ""];
+~0.01
+_veh setObjectTextureGlobal [3, ""];
+~0.5
+? (_RoleArray select 0 == "Driver") and (_vehAssigned == _veh) : moveOut player;
+~0.6
+player moveInDriver _vehAssigned;
+~0.2
+player assignAsDriver _vehAssigned;
+~0.5
+_unitSC1 = group _veh createUnit ["Pilot_SC_1990", position _veh, [], 0, "FORM"];
+_unitSC1 moveInCargo [_veh, 1];
+_unitSC1 assignAsCargo _veh;
+_unitSC2 = group _veh createUnit ["Pilot_SC_1990", position _veh, [], 0, "FORM"];
+_unitSC2 moveInCargo [_veh, 1];
+_unitSC2 assignAsCargo _veh;
+~0.1
+exit

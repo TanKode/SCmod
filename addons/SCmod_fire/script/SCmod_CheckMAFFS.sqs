@@ -1,0 +1,28 @@
+_veh = _this select 0;
+#CheckMAFFS
+_weaponClass = currentWeapon _veh;
+_count = _veh ammo "water6000";
+?_count == 0 : goto "MAFFSWeapEmpty";
+~0.1
+?!(_weaponClass == "water6000") : goto "MAFFSWeapEmpty";
+~0.1
+?((_weaponClass == "water6000") && ((getpos _veh select 2) < 24)) : goto "MAFFSWeapALT";
+~0.1
+?((_weaponClass == "water6000") && ((getpos _veh select 2) >= 150)) : goto "MAFFSWeapEmpty";
+~0.1
+?((_weaponClass == "water6000") && ((getpos _veh select 2) >= 24)) : goto "MAFFSWeap";
+
+#MAFFSWeapEmpty
+_veh animate ["ramp_bottom",0];
+_veh animate ["ramp_top",0];
+goto "CheckMAFFS";
+
+#MAFFSWeapALT
+_veh animate ["ramp_bottom",0];
+_veh animate ["ramp_top",1];
+goto "CheckMAFFS";
+
+#MAFFSWeap
+_veh animate ["ramp_bottom",1];
+_veh animate ["ramp_top",1];
+goto "CheckMAFFS";

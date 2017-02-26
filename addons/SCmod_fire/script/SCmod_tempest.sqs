@@ -1,0 +1,8 @@
+_veh = _this select 0;
+~0.01
+_cargoTempest = group _veh createUnit ["Operator_SC", position _veh, [], 0, "FORM"];
+_cargoTempest moveIncargo _veh;
+_cargoTempest assignAscargo _veh;
+[_cargoTempest] orderGetIn true;
+~0.01
+exit

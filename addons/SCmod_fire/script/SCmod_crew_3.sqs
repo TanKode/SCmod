@@ -1,0 +1,23 @@
+_veh = _this select 0;
+~0.5
+_veh setObjectTextureGlobal [0, "SCmod_fire\Data\Taru_SCmod_1.paa"];
+_veh setObjectTextureGlobal [1, "SCmod_fire\Data\Taru_SCmod_2.paa"];
+~0.05
+_veh deleteVehicleCrew gunner _veh;
+deleteVehicle (_veh turretUnit [0]);
+~0.01
+_gunnerSCMi292 = group _veh createUnit ["Pilot_SC_1990", position _veh, [], 0, "FORM"];
+_gunnerSCMi292 moveIngunner _veh;
+_gunnerSCMi292 assignAsgunner _veh;
+[_gunnerSCMi292] orderGetIn true;
+~0.01
+_codriverSCMi292 = group _veh createUnit ["Pilot_SC", position _veh, [], 0, "FORM"];
+_codriverSCMi292 moveInTurret [_veh, [0]];
+_codriverSCMi292 assignAsTurret [_veh, [0]];
+[_codriverSCMi292] orderGetIn true;
+~0.01
+_veh action ["MANUALFIRE", _veh];
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+
+exit

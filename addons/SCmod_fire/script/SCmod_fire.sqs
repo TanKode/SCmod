@@ -1,0 +1,60 @@
+_object  = _this select 0;
+?(not alive _object): goto "ExitScript";
+~0.01
+_object setVariable ["effects",[]];
+_pos01 = getPos _object;
+~0.01
+_source01 = "#particlesource" createVehicleLocal _pos01;
+_source01 setParticleClass "ObjectDestructionFire1Smallx";
+_source01 setParticleCircle [2.8 + random 2.2,[0.1,0.1,1.4]];
+_source01 setParticleRandom [1.2, [0, 0, 0], [0, 0, 0], 0, 1.2, [0.8, 0, 0, 0.8], 0, 0];
+_source01 setParticleFire [4,4,4];
+_source01 attachto [_object,[0,0,0]];
+~0.01
+_source02 = "#particlesource" createVehicleLocal _pos01;
+_source02 setParticleClass "SCBigDestructionSmoke";
+_source02 attachto [_object,[0,0,0]];
+~0.01
+_source03 = "#particlesource" createVehicleLocal _pos01;
+_source03 setParticleClass "FireSparks";
+_source03 setParticleCircle [0.8 + random 0.4,[0,0,1]];
+_source03 attachto [_object,[0,0,0]];
+~0.01
+_li = "#lightpoint" createVehicleLocal _pos01;
+_li lightAttachObject [_object, [0,0,0]];
+~0.01
+_li setLightBrightness 8;
+_li setLightAmbient[1,0.5,0];
+_li setLightColor[1, 0.5, 0];
+_li setLightAttenuation [4,4,4,8];
+_li setLightDayLight true;
+~0.05
+_object setVariable ["effects",[_source01,_source02,_source03,_li]];
+~0.01
+_OverWater0 = surfaceIsWater (getpos _object);
+?_OverWater0 = true : goto "ExitScript";
+~0.01
+_objPos = getpos _object;
+{_x setdamage 1;} foreach (nearestObjects [_object,[],18]) - (nearestObjects [_object,["SCmod_fire"],20]);
+_burned_grnd = createVehicle ["burned_grd", _objPos, [], 0, "CAN_COLLIDE"];
+~0.01
+[_object] exec "\SCmod_fire\script\SCmod_steam_fire.sqs";
+~0.01
+[_object] exec "\SCmod_fire\script\SCmod_fire_prop.sqs";
+
+_n = 0;
+
+#looping
+~0.01
+?(not alive _object): goto "ExitScript";
+~1.0 + random 1.0
+_n = _n + 1;
+?_n < 110: goto "looping";
+
+#ExitScript
+~0.01
+_emitterArray = _object getVariable "effects";
+~0.05
+{deleteVehicle _x} forEach _emitterArray;
+deleteVehicle _object;
+exit

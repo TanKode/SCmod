@@ -1,0 +1,20 @@
+_veh = _this select 0;
+_veh setObjectTextureGlobal [0, "SCmod_fire\Data\PO30_SC.paa"];
+~0.01
+_gunnerSCPO32 = group _veh createUnit ["Pilot_SC_1990", position _veh, [], 0, "FORM"];
+_gunnerSCPO32 moveIncargo _veh;
+_gunnerSCPO32 assignAscargo _veh;
+[_gunnerSCPO32] orderGetIn true;
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.01
+_vehAssigned = assignedVehicle player;
+_RoleArray = assignedVehicleRole player;
+~1.0
+? (_RoleArray select 0 == "Driver") and (_vehAssigned == _veh) : moveOut player;
+~0.5
+player moveInDriver _vehAssigned;
+~0.5
+player assignAsDriver _vehAssigned;
+~0.01
+exit

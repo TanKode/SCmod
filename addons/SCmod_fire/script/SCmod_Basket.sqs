@@ -1,0 +1,4 @@
+_pilot = _this select 0;
+_deployBasket = _pilot addAction ["<t color='#FF6600'>Deploy winch rope</t>", "\SCmod_fire\script\SCmod_BasketD.sqs","",4.62,false,true];
+~0.1
+exit

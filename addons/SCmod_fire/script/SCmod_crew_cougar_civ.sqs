@@ -1,0 +1,9 @@
+_veh = _this select 0;
+~0.25
+[_veh] exec "\SCmod_fire\script\SCmod_Basket.sqs";
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.5
+_veh action ["MANUALFIRE", _veh];
+~0.5
+exit

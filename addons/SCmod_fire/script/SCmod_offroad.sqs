@@ -1,0 +1,17 @@
+_veh = _this select 0;
+~0.01
+_veh setObjectTexture [0, "SCmod_fire\data\offroad_SC_ext_co.paa"];
+_veh setObjectTexture [1, "SCmod_fire\data\offroad_SC_ext_co.paa"];
+~0.01
+_veh animate ["HidePolice", 0];
+_veh animate ["HideServices", 1];
+_veh animate ["HideBackpacks", 1];
+_veh animate ["HideBumper1", 1];
+_veh animate ["HideBumper2", 0];
+_veh animate ["HideConstruction", 0];
+_veh animate ["HideDoor1", 0];
+_veh animate ["HideDoor2", 0];
+_veh animate ["HideDoor3", 0];
+_veh animate ["HideGlass2", 0];
+~0.5
+exit

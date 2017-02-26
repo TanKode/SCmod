@@ -1,0 +1,21 @@
+_veh = _this select 0;
+_vehAssigned = assignedVehicle player;
+_RoleArray = assignedVehicleRole player;
+~1.5
+? (_RoleArray select 0 == "Driver") and (_vehAssigned == _veh) : moveOut player;
+~0.5
+player moveInDriver _vehAssigned;
+~0.5
+player assignAsDriver _vehAssigned;
+~0.5
+_veh action ["MANUALFIRE", _veh];
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.5
+_veh selectWeapon "water9000";
+_veh selectWeapon "water8000";
+_NosePos = [-0.01,5.5,-0.75];
+_Nose = "sc_nose" createVehicle (getpos _veh);
+_Nose attachTo [_veh, _NosePos];
+~0.01
+exit

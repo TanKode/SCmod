@@ -1,0 +1,54 @@
+_veh = _this select 0;
+_vehAssigned = assignedVehicle player;
+_RoleArray = assignedVehicleRole player;
+~0.25
+[_veh] exec "\SCmod_fire\script\SCmod_Basket.sqs";
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.5
+? (_RoleArray select 0 == "Driver") and (_vehAssigned == _veh) : moveOut player;
+~0.6
+player moveInDriver _vehAssigned;
+~0.2
+player assignAsDriver _vehAssigned;
+~0.5
+_mirr0Pos = [-0.05,7.2,-1.4];
+_TankPos0 = [-0.03,-0.2,-1.85];
+_GearPos0 = [-1.38,2.45,-2.95];
+_GearPos1 = [1.32,2.45,-2.95];
+_GearPos2 = [-1.52,-3.92,-2.80];
+_GearPos3 = [1.46,-3.92,-2.80];
+_winchPos = [1.58,3.54,-0.25];
+
+_mirr0 = "sc_reflection_mirror_2" createVehicle (getpos _veh);
+_Tank0 = "sc_tanks" createVehicle (getpos _veh);
+_Gear0 = "sc_gear" createVehicle (getpos _veh);
+_Gear1 = "sc_gear" createVehicle (getpos _veh);
+_Gear2 = "sc_gear" createVehicle (getpos _veh);
+_Gear3 = "sc_gear" createVehicle (getpos _veh);
+_winch = "sc_winch" createVehicle (getpos _veh);
+
+_mirr0 attachTo [_veh, _mirr0Pos];
+_Tank0 attachTo [_veh, _TankPos0];
+_Gear0 attachTo [_veh, _GearPos0];
+_Gear1 attachTo [_veh, _GearPos1];
+_Gear2 attachTo [_veh, _GearPos2];
+_Gear3 attachTo [_veh, _GearPos3];
+_winch attachTo [_veh, _winchPos];
+
+?(player in _veh) : goto "cameraPiPInit";
+~0.01
+exit
+
+#cameraPiPInit
+~0.01
+_cam = "camera" camCreate [getpos _veh select 0, getpos _veh select 1, (getpos _veh select 2) -1];
+_cam attachTo [_veh,[1,9,-3.1]];
+_cam setVectorDirAndUp [[0,-1,0],[0,0,1]];
+_cam camSetFov 0.7;
+_cam camCommit 0;
+"rendertarget4" setPiPEffect [4];
+_cam cameraEffect ["INTERNAL", "BACK","rendertarget4"];
+_mirr0 setObjectTexture [0,"#(argb,256,256,1)r2t(rendertarget4,1.0)"];
+~0.05
+exit

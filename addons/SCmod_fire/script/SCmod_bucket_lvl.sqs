@@ -1,0 +1,105 @@
+#Bucket_lvl
+_cargo = _this select 0;
+_veh = ropeAttachedTo _cargo;
+_count = _veh ammo "water8000";
+~0.05
+?_count == 0 : goto "Empty";
+?_count <= 25 : goto "TWOFIVE";
+?_count <= 50 : goto "FIVEZERO";
+?_count <= 75 : goto "SEVENFIVE";
+?_count <= 100 : goto "Full";
+
+#Full
+_cargo setObjectTexture [4,"SCmod_fire\data\bucket_texture.paa"];
+_cargo setObjectTexture [9,"scmod_fire\data\water_flx.paa"];
+_cargo setObjectTexture [14,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [0,""];
+_cargo setObjectTexture [1,""];
+_cargo setObjectTexture [2,""];
+_cargo setObjectTexture [3,""];
+_cargo setObjectTexture [5,""];
+_cargo setObjectTexture [6,""];
+_cargo setObjectTexture [7,""];
+_cargo setObjectTexture [8,""];
+_cargo setObjectTexture [10,""];
+_cargo setObjectTexture [11,""];
+_cargo setObjectTexture [12,""];
+_cargo setObjectTexture [13,""];
+_cargo setMass 1200;
+goto "Bucket_lvl";
+
+#SEVENFIVE
+_cargo setObjectTexture [3,"SCmod_fire\data\bucket_texture.paa"];
+_cargo setObjectTexture [8,"scmod_fire\data\water_flx.paa"];
+_cargo setObjectTexture [13,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [0,""];
+_cargo setObjectTexture [1,""];
+_cargo setObjectTexture [2,""];
+_cargo setObjectTexture [4,""];
+_cargo setObjectTexture [5,""];
+_cargo setObjectTexture [6,""];
+_cargo setObjectTexture [7,""];
+_cargo setObjectTexture [9,""];
+_cargo setObjectTexture [10,""];
+_cargo setObjectTexture [11,""];
+_cargo setObjectTexture [12,""];
+_cargo setObjectTexture [14,""];
+_cargo setMass 900;
+goto "Bucket_lvl";
+
+#FIVEZERO
+_cargo setObjectTexture [2,"SCmod_fire\data\bucket_texture.paa"];
+_cargo setObjectTexture [7,"scmod_fire\data\water_flx.paa"];
+_cargo setObjectTexture [12,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [0,""];
+_cargo setObjectTexture [1,""];
+_cargo setObjectTexture [3,""];
+_cargo setObjectTexture [4,""];
+_cargo setObjectTexture [5,""];
+_cargo setObjectTexture [6,""];
+_cargo setObjectTexture [8,""];
+_cargo setObjectTexture [9,""];
+_cargo setObjectTexture [10,""];
+_cargo setObjectTexture [11,""];
+_cargo setObjectTexture [13,""];
+_cargo setObjectTexture [14,""];
+_cargo setMass 600;
+goto "Bucket_lvl";
+
+#TWOFIVE
+_cargo setObjectTexture [1,"SCmod_fire\data\bucket_texture.paa"];
+_cargo setObjectTexture [6,"scmod_fire\data\water_flx.paa"];
+_cargo setObjectTexture [11,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [0,""];
+_cargo setObjectTexture [2,""];
+_cargo setObjectTexture [3,""];
+_cargo setObjectTexture [4,""];
+_cargo setObjectTexture [5,""];
+_cargo setObjectTexture [7,""];
+_cargo setObjectTexture [8,""];
+_cargo setObjectTexture [9,""];
+_cargo setObjectTexture [10,""];
+_cargo setObjectTexture [12,""];
+_cargo setObjectTexture [13,""];
+_cargo setObjectTexture [14,""];
+_cargo setMass 300;
+goto "Bucket_lvl";
+
+#Empty
+_cargo setObjectTexture [0,"SCmod_fire\data\bucket_texture.paa"];
+_cargo setObjectTexture [5,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [10,"#(rgb,8,8,3)color(0,0,0,1)"];
+_cargo setObjectTexture [1,""];
+_cargo setObjectTexture [2,""];
+_cargo setObjectTexture [3,""];
+_cargo setObjectTexture [4,""];
+_cargo setObjectTexture [6,""];
+_cargo setObjectTexture [7,""];
+_cargo setObjectTexture [8,""];
+_cargo setObjectTexture [9,""];
+_cargo setObjectTexture [11,""];
+_cargo setObjectTexture [12,""];
+_cargo setObjectTexture [13,""];
+_cargo setObjectTexture [14,""];
+_cargo setMass 80;
+goto "Bucket_lvl";

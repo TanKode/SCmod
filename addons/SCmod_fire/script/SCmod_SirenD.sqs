@@ -1,0 +1,11 @@
+_veh = _this select 0;
+_id = _this select 2;
+_veh removeAction _id;
+~0.5
+playSound "SCSiren";
+_veh sidechat "Siren is in function.";
+~12.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.1
+#ExitScript
+exit

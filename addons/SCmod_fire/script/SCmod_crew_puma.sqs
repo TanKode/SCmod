@@ -1,0 +1,28 @@
+_veh = _this select 0;
+~0.25
+[_veh] exec "\SCmod_fire\script\SCmod_Basket.sqs";
+~0.5
+[_veh] exec "\SCmod_fire\script\SCmod_Siren.sqs";
+~0.5
+_veh action ["MANUALFIRE", _veh];
+~0.5
+_mirrorPos = [0.8,4.9,-0.9];
+_mirror = "sc_reflection_mirror_4" createVehicle (getpos _veh);
+_mirror attachTo [_veh, _mirrorPos];
+
+?(player in _veh) : goto "cameraPiPInit";
+~0.01
+exit
+
+#cameraPiPInit
+~0.01
+_cam = "camera" camCreate [getpos _veh select 0, getpos _veh select 1, (getpos _veh select 2) -1];
+_cam attachTo [_veh,[1.5,6.0,-2.1]];
+_cam setVectorDirAndUp [[0,-1,0],[0,0,1]];
+_cam camSetFov 0.7;
+_cam camCommit 0;
+"rendertarget5" setPiPEffect [4];
+_cam cameraEffect ["INTERNAL", "BACK","rendertarget5"];
+_mirror setObjectTexture [0,"#(argb,256,256,1)r2t(rendertarget5,1.0)"];
+~0.05
+exit

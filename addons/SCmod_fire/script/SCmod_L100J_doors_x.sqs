@@ -1,0 +1,18 @@
+_veh = _this select 0;
+#CheckEngines
+_weaponClass = currentWeapon _veh;
+?!(isEngineOn _veh) : goto "DoorEngineOn";
+~0.1
+?(isEngineOn _veh) : goto "DoorEngineOff";
+
+#DoorEngineOff
+_veh animate ["door_1",0];
+_veh animate ["door_2_1",0];
+_veh animate ["door_2_2",0];
+goto "CheckEngines";
+
+#DoorEngineOn
+_veh animate ["door_1",1];
+_veh animate ["door_2_1",1];
+_veh animate ["door_2_2",1];
+goto "CheckEngines";
