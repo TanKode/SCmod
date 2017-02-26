@@ -1,0 +1,14 @@
+_veh = _this select 0;
+_vehAssigned = assignedVehicle player;
+~0.5
+moveOut player;
+~0.6
+player moveInDriver _vehAssigned;
+~0.2
+player assignAsDriver _vehAssigned;
+~0.5
+_unitSC1 = group _veh createUnit ["Pilot_SC", position _veh, [], 0, "FORM"];
+_unitSC1 moveInCargo [_veh, 1];
+_unitSC1 assignAsCargo _veh;
+~0.1
+exit

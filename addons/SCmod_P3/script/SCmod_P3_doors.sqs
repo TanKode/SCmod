@@ -1,0 +1,27 @@
+_veh = _this select 0;
+
+#CheckEngines
+_weaponClass = currentWeapon _veh;
+?!(isEngineOn _veh) : goto "DoorEngineOff";
+~0.1
+?(isEngineOn _veh) : goto "DoorEngineOn";
+
+#DoorEngineOn
+_veh setObjectTexture [1, "\SCmod_P3\textures\Pan2.paa"];
+_veh animate ["TEsc",0];
+_veh animate ["Esc2",0];
+~1.0
+_veh animate ["Esc1",0];
+~1.2
+_veh animate ["door",0];
+goto "CheckEngines";
+
+#DoorEngineOff
+_veh setObjectTexture [1, "\SCmod_P3\textures\Pan2_off.paa"];
+_veh animate ["door",1];
+~1.2
+_veh animate ["Esc1",1];
+~1.0
+_veh animate ["Esc2",1];
+_veh animate ["TEsc",0];
+goto "CheckEngines";
