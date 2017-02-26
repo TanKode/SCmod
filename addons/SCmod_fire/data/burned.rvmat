@@ -1,0 +1,27 @@
+ambient[]={0.40392157,0.40392157,0.40392157,1};
+diffuse[]={0.12233344,0.17233334,0.15735295,1};
+forcedDiffuse[]={0.21103922,0.22303921,0.22803922,0.015000015};
+emmisive[]={0.15735295,0.15735295,0.15735295,0.84399992};
+specular[]={0.11372549,0.11372549,0.11372549,1};
+specularPower=21.200001;
+PixelShaderID="NormalMapSpecularDIMap";
+VertexShaderID="NormalMap";
+class Stage0
+{
+	texture="SCmod_fire\data\burned_ground.paa";
+	uvSource="tex";
+	Filter="Trilinear";
+};
+class Stage1
+{
+	texture="SCmod_fire\data\burned_ground.paa";
+	uvSource="tex";
+	class uvTransform
+	{
+		aside[]={1,0,0};
+		up[]={0,1,0};
+		dir[]={0,0,0};
+		pos[]={0,0,0};
+	};
+	Filter="Trilinear";
+};
