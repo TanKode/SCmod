@@ -1,0 +1,16 @@
+name = "SCmod";
+picture = "logo_SCmod.paa";
+actionName = "Website";
+action = "http://makearmanotwar.com/entry/SdvsB09OYS#.VCwfCfl_uK8";
+description = "SCmod simulates the aerial operations against forest fires.";
+logo = "logo_SCmod.paa";
+logoOver = "logo_over_SCmod.paa";
+tooltip = "SCmod";
+tooltipOwned = "SCmod";
+overview = "SCmod simulates the aerial operations against forest fires. You can find additional information in the PDF documentation.";
+author = "CheyenneAH56";
+overviewPicture = "picture_SCmod.paa";
+overviewText = "SCmod";
+//dir = "SCmod";
+//infoPages[] = {};
+overviewFootnote = "SCmod is under ARMA PUBLIC LICENSE SHARE ALIKE (APL-SA)";
